@@ -1,6 +1,8 @@
 require(shiny)
+require(shinyjs)
 
 shinyUI(fluidPage(
+			tags$head(tags$script(src = "message-handler.js")),
 			# Application title
 			titlePanel("LabelMaker Assistant"),
 			helpText('Use this tool to help facilitate the making of entries for the', a('LabelMaker Spreasheet', href = ' https://docs.google.com/spreadsheets/d/1ngMyWLLtBerwBpAPl713UGix9b-jHmzALFPLHiP7UY0/edit?usp=sharing', target = '_blank'), '.'),
@@ -19,8 +21,13 @@ shinyUI(fluidPage(
 			fluidRow(column(12, uiOutput('cages_ui'))),
 			hr(),
 			h4('Output for LabelMaker Spreadsheet'),
-			helpText('Copy the output below and paste it into the LabelMaker Spreadsheet.'),
-			fluidRow(column(6, verbatimTextOutput('final_output'))),
-			helpText(a("Open LabelMaker Spreadsheet in a new tab", href = 'https://docs.google.com/spreadsheets/d/1ngMyWLLtBerwBpAPl713UGix9b-jHmzALFPLHiP7UY0/edit?usp=sharing', target = "_blank"))
+			helpText('Copy the output below and paste it into the LabelMaker Spreadsheet. If you toggle generating the barcode labels here, you will not have to generate them in the spreadsheet, and can use the spreadsheet simply as a way of exporting the barcodes in a label printer software-friendly way. I am working to bring all of these functions into this UI.'),
+			fluidRow(column(6, offset = 1,  checkboxInput(inputId = 'toggle_barcode', label = 'Generate Barcode Labels', value = FALSE), tableOutput('labelmaker_output'))),
+			helpText(a("Open LabelMaker Spreadsheet in a new tab", href = 'https://docs.google.com/spreadsheets/d/1ngMyWLLtBerwBpAPl713UGix9b-jHmzALFPLHiP7UY0/edit?usp=sharing', target = "_blank")),
+			downloadButton('download_labels_file', 'Download Labels.csv file'), actionButton(inputId = 'add_to_master', label = "Push to 'Master List 2' tab on LabelMaker Spreadsheet"), 
+			hr(),
+			h4('Output for Mapping File'),
+			helpText('This table has a more complete description of the samples'),
+			fluidRow(column(10, offset = 1,  tableOutput('mapping_output'), downloadButton('download_mapping', 'Download Mapping File (.csv)')))
 			)
 			)

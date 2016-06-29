@@ -2,6 +2,6 @@ name: LabelMakerAssistant
 account: econtijoch
 server: shinyapps.io
 appId: 111297
-bundleId: 491969
+bundleId: 492561
 url: https://econtijoch.shinyapps.io/LabelMakerAssistant/
-when: 1467154994.35829
+when: 1467214506.00784
