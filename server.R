@@ -124,7 +124,7 @@ shinyServer(function(input, output, session) {
 				    # the argument 'file'.
 				    content = function(file) {
 				      # Write to a file specified by the 'file' argument
-				      write.table(labels_file(), file, quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",")
+				      write.table(labels_file(), file, quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",", eol = '\n')
 				    }
 				  )
 				
