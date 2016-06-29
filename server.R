@@ -1,4 +1,5 @@
 require(shiny)
+require(stringr)
 
 shinyServer(function(input, output, session) {
 
@@ -50,7 +51,11 @@ shinyServer(function(input, output, session) {
 				animals_list <- list()
 				for (i in 1:input$n_cages) {
 					for (k in 1:length(input$sample_type)) {
+						if (input$sample_type[k] == " ") {
+						animals_list[[paste0(i,"_",k)]] <- paste(i, input_list()[[paste0('cage_', i, '_animals_selected')]], sep = "")
+					} else {
 						animals_list[[paste0(i,"_",k)]] <- paste(i, input_list()[[paste0('cage_', i, '_animals_selected')]], input$sample_type[k], sep = "")
+					}
 					}
 				}
 				return(unlist(animals_list))
@@ -59,14 +64,23 @@ shinyServer(function(input, output, session) {
 					
 				output$final_output <- renderText({
 					if (!is.null(date_list$dates) && !is.null(input$sample_type)) {
-					output_list <- list("EXP_ID\tSmpl_ID\tDate\n")
+					output_list <- list("EXP_ID\tSample_ID\tDate\tBarcodeID\n")
 					unique_dates <- unique(unlist(date_list$dates))
 					for (i in 1:length(unique(unlist(date_list$dates)))) {
 						for (j in 1:length(animals_total())) {
-							output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], sep = '\t'), '\n', sep = "")
+							
+							expid <- input$experiment_id
+							sampleid <- str_pad(animals_total()[j], width = 15 - nchar(expid), pad = "0", side = 'left')
+							date <- format(as.Date(unique(unlist(sort(date_list$dates))), origin = "1970-01-01"), "%m%d%y")[i]
+							random_string <- paste(sample(c(LETTERS, letters, 0:9), replace = T,size = 5), collapse = "")
+							
+							barcodeid <- paste(expid, sampleid, date, random_string,  sep = "|")
+							
+							output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], barcodeid, sep = '\t'), '\n', sep = "")
 						}
 					}
-					unlist(output_list)
+					final <- unlist(output_list)
+					final
 				}
 				})
 				
