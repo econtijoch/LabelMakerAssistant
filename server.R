@@ -78,17 +78,15 @@ shinyServer(function(input, output, session) {
 						
 						barcodeid <- paste(expid, sampleid, date, random_string,  sep = "|")
 						
-						if (input$toggle_barcode) {
-							output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], barcodeid, sep = '\t'), '\n', sep = "")
-						} else {
-							output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], ' ',  sep = '\t'), '\n', sep = "")
-						}
+						output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], barcodeid, sep = '\t'), '\n', sep = "")
+
 					}
 				}
 				final <- unlist(output_list)
 				cat(final, file = 'temp.txt')
 				
 				table <- read.delim('temp.txt', header = T)
+				table$Experiment_ID <- input$experiment_id
 				output <- list(table, output_list)
 				return(output)
 			}
@@ -96,6 +94,7 @@ shinyServer(function(input, output, session) {
 					
 				output$labelmaker_output <- renderTable({labelmaker_table()[[1]]}, include.rownames = F)
 				
+
 				observeEvent(input$add_to_master, {
 					success <- list()
 					for (i in 1:nrow(labelmaker_table()[[1]])) {
@@ -124,7 +123,7 @@ shinyServer(function(input, output, session) {
 				    # the argument 'file'.
 				    content = function(file) {
 				      # Write to a file specified by the 'file' argument
-				      write.table(labels_file(), file, quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",", eol = '\n')
+				      write.table(labels_file(), file, quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",", eol = '\r\n')
 				    }
 				  )
 				
@@ -156,7 +155,7 @@ shinyServer(function(input, output, session) {
 							
 							condition <- input_list()[[paste0('cage_', cage, '_condition')]]
 							
-							output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], " ", cage, animal, sample_type, malefemale, condition,  sep = '\t'), '\n', sep = "")
+							output_list[[paste0(i,"_",j)]] <- paste(paste(input$experiment_id, animals_total()[j], format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")[i], " ", cage, animal, sample_type, malefemale, condition,  sep = '\t'), '\r\n', sep = "")
 						
 						
 						}
@@ -165,17 +164,15 @@ shinyServer(function(input, output, session) {
 					cat(final, file = 'temp2.txt')
 					
 					table <- read.delim('temp2.txt', header = T)
-					
-					if (input$toggle_barcode) {
-						table$BarcodeID <- labelmaker_table()[[1]]$BarcodeID
-					}
-					
+					table$BarcodeID <- labelmaker_table()[[1]]$BarcodeID
+					table$Experiment_ID <- input$experiment_id
 					output <- list(table, output_list)
 					return(output)
 				}
 				})
 				
 				output$mapping_output <- renderTable({mapping_table()[[1]]}, include.rownames = F)
+
 				
 				output$download_mapping <- downloadHandler(
 
@@ -189,8 +186,8 @@ shinyServer(function(input, output, session) {
 				    # the argument 'file'.
 				    content = function(file) {
 				      # Write to a file specified by the 'file' argument
-				      write.csv(mapping_table()[[1]], file,
-				        row.names = FALSE)
+				      write.table(mapping_table()[[1]], file,
+				        row.names = FALSE, quote = FALSE, sep = ",", eol = "\r\n")
 				    }
 				  )
 				
