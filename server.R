@@ -54,9 +54,13 @@ shinyServer(function(input, output, session) {
 				for (i in 1:input$n_cages) {
 					for (k in 1:length(input$sample_type)) {
 						if (input$sample_type[k] == " ") {
+							if (!is.null(input_list()[[paste0('cage_', i, '_animals_selected')]])) {
 						animals_list[[paste0(i,"_",k)]] <- paste(i, input_list()[[paste0('cage_', i, '_animals_selected')]], sep = "")
+					}
 					} else {
+						if (!is.null(input_list()[[paste0('cage_', i, '_animals_selected')]])) {
 						animals_list[[paste0(i,"_",k)]] <- paste(i, input_list()[[paste0('cage_', i, '_animals_selected')]], input$sample_type[k], sep = "")
+					}
 					}
 					}
 				}
