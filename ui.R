@@ -1,7 +1,7 @@
 require(shiny)
 require(shinyjs)
 
-shinyUI(fluidPage(theme = 'bootstrap.css',
+shinyUI(fluidPage(
 			useShinyjs(),
 			tags$head(tags$script(src = "message-handler.js")),
 			# Application title
