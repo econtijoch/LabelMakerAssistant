@@ -37,7 +37,7 @@ shinyServer(function(input, output, session) {
 			cage_reactive_output <- reactive({
 				lapply(1:input$n_cages, function(i) {
 					output[[paste0('cage_',i)]] <- renderUI({
-						column(2, style = 'border-style: solid;border-color:black', checkboxGroupInput(inputId = paste0('cage_', i, '_animals_selected'), label = paste0("Animals in Cage # ", i), choices = animal_ids, selected = animal_ids, inline = F), hr(), selectInput(inputId = paste0('cage_', i, '_sex'), label = paste0("Cage # ", i, " Animal Sex"), choices = c("Male", "Female")), hr(), textInput(inputId = paste0('cage_', i, '_condition'), label = paste0("Cage # ", i, " Condition"), value = paste0('Condition_', i)))
+						column(2, style = 'border-style: solid;border-color:black', checkboxGroupInput(inputId = paste0('cage_', i, '_animals_selected'), label = paste0("Animals in Cage # ", i), choices = animal_ids, selected = animal_ids, inline = F), hr(), selectInput(inputId = paste0('cage_', i, '_sex'), label = paste0("Cage # ", i, " Animal Sex"), choices = c("Female", "Male")), hr(), textInput(inputId = paste0('cage_', i, '_condition'), label = paste0("Cage # ", i, " Condition"), value = paste0('Condition_', i)))
 					})	
 				})
 			})
