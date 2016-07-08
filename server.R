@@ -31,7 +31,10 @@ shinyServer(function(input, output, session) {
 				dates <- format(as.Date(unique(unlist(sort(date_list$dates))), origin="1970-01-01"), "%m/%d/%Y")
 				cat('Dates Selected\n')
 				cat(paste(dates, '\n', sep = ""), sep = "")
+			} else {
+				cat('No Dates Selected\n')
 			}
+			
 			})
 			
 			cage_reactive_output <- reactive({
