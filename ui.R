@@ -14,7 +14,7 @@ shinyUI(fluidPage(
 			column(2, dateInput(inputId = 'date_selected', label = "Select Dates", format = 'mm/dd/yy', value = Sys.Date()-3)),
 			column(2, verbatimTextOutput('sampling_dates_selected'), p(), actionButton(inputId = 'reset_dates', label = "Reset Dates", icon = icon('refresh')))
 			),
-			fluidRow(column(3, selectizeInput(inputId = 'sample_type', label = 'Select Sample Type', choices = c('General' = ' ', 'Fecal Pellet' = '-FP', 'Duodenum' = '-D', 'Jejunum' = '-J', 'Ileum' = '-I', 'Cecum' = '-C', 'Proximal Colon' = '-PC', 'Colon' = '-Colon', 'IgA' = '-IgA', 'Lipocalin' = '-LCN'), multiple = T, selected = ' '))
+			fluidRow(column(3, selectizeInput(inputId = 'sample_type', label = 'Select Sample Type', choices = c('General' = ' ', 'Fecal Pellet' = '-FP', 'Duodenum' = '-D', 'Jejunum' = '-J', 'Ileum' = '-I', 'Cecum' = '-C', 'Proximal Colon' = '-PC', 'Colon' = '-Colon', 'IgA' = '-IgA', 'Lipocalin' = '-LCN', 'Serum' = '-Serum', 'Other' = '-other'), multiple = T, selected = ' '))
 			),
 			hr(),
 			tags$div(id = 'Cages'),
@@ -26,9 +26,9 @@ shinyUI(fluidPage(
 			hr(),
 			tags$div(id = 'Labels'),
 			h4('View Label Output'),
-			helpText('The entries in the table below can be downloaded locally as a .csv file to use with the LabelMark software, and can also be exported into the label database in the LabelMaker Spreadsheet (the tab titled Master List 2).'),
+			helpText('The entries in the table below can be downloaded locally as a .csv file to use with the LabelMark software, and can also be exported into the label database in the LabelMaker Spreadsheet (the tab titled Master List 2).', strong('To ensure the same barcodes, FIRST push the labels to the google spreadsheet, THEN download your Labels.csv and mapping files.'), "I am currently working on finding a way to make sure the barcodes don't update when we push them to the google sheet."),
 			fluidRow(column(6, offset = 1, 
-				downloadButton('download_labels_file', 'Download Labels.csv file'), actionButton(inputId = 'add_to_master', label = "Push to 'Master List 2' tab in LabelMaker Spreadsheet"),
+				actionButton(inputId = 'add_to_master', label = "Push to 'Master List 2' tab in LabelMaker Spreadsheet"), downloadButton('download_labels_file', 'Download Labels.csv file'), 
 				HTML("<br><br>"),
 				tableOutput('labelmaker_output')
 #			helpText(a("Open LabelMaker Spreadsheet in a new tab", href = 'https://docs.google.com/spreadsheets/d/1ngMyWLLtBerwBpAPl713UGix9b-jHmzALFPLHiP7UY0/edit?usp=sharing', target = "_blank")),

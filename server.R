@@ -90,9 +90,9 @@ shinyServer(function(input, output, session) {
 					}
 				}
 				final <- unlist(output_list)
-				cat(final, file = 'temp.txt')
+				cat(final, file = 'labels_temp.txt')
 				
-				table <- read.delim('temp.txt', header = T)
+				table <- read.delim('labels_temp.txt', header = T)
 				table$Experiment_ID <- input$experiment_id
 				output <- list(table, output_list)
 				return(output)
@@ -103,6 +103,7 @@ shinyServer(function(input, output, session) {
 				
 
 				observeEvent(input$add_to_master, {
+					isolate({
 					success <- list()
 					for (i in 1:nrow(labelmaker_table()[[1]])) {
 						success[[i]] <- capture.output({ss %>% gs_add_row(ws = "Master List 2", input = labelmaker_table()[[1]][i,])}, type = 'message')
@@ -110,6 +111,7 @@ shinyServer(function(input, output, session) {
 					unlisted_success <- unlist(success)
 					number_appended <- sum(unlisted_success == 'Row successfully appended.')
 					session$sendCustomMessage(type = 'testmessage', message = paste(number_appended, 'rows were added to LabelMaker Spreadsheet Master List 2 tab.'))
+				})
 				})
 				
 				labels_file <- reactive({
@@ -168,9 +170,9 @@ shinyServer(function(input, output, session) {
 						}
 					}
 					final <- unlist(output_list)
-					cat(final, file = 'temp2.txt')
+					cat(final, file = 'mapping_temp.txt')
 					
-					table <- read.delim('temp2.txt', header = T)
+					table <- read.delim('mapping_temp.txt', header = T)
 					table$BarcodeID <- labelmaker_table()[[1]]$BarcodeID
 					table$Experiment_ID <- input$experiment_id
 					output <- list(table, output_list)
